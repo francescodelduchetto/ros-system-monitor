@@ -231,7 +231,7 @@ class CPUMonitor():
                 words = ln.split(':')
                 if len(words) < 2:
                     continue
-
+              
                 speed = words[1].strip().split('.')[0] # Conversion to float doesn't work with decimal
                 vals.append(KeyValue(key = 'Core %d Clock Speed' % index, value = speed+"MHz"))
 
@@ -263,7 +263,6 @@ class CPUMonitor():
                 return DiagnosticStatus.ERROR, vals
 
             upvals = stdout.split()
-            rospy.logwarn(upvals)
             load1 = float(upvals[-3].rstrip(',').replace(",", "."))/self._num_cores
             load5 = float(upvals[-2].rstrip(',').replace(",", "."))/self._num_cores
             load15 = float(upvals[-1].replace(",", "."))/self._num_cores
@@ -339,7 +338,7 @@ class CPUMonitor():
                 system = lst[5]
 
                 core_level = 0
-                usage = (float(user)+float(nice))*1e-2
+                usage = (float(user.replace(',', '.', 1))+float(nice.replace(',', '.', 1)))*1e-2
                 if usage > 10.0: # wrong reading, use old reading instead
                     rospy.logwarn('Read CPU usage of %f percent. Reverting to previous reading of %f percent'%(usage, self._usage_old))
                     usage = self._usage_old
