@@ -57,6 +57,7 @@ from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 
 net_level_warn = 0.95
 net_capacity = 128
+ignore_ifaces = []
 
 stat_dict = {0: 'OK', 1: 'Warning', 2: 'Error'}
 
@@ -105,6 +106,7 @@ class NetMonitor():
     self._mutex = threading.Lock()
     self._net_level_warn = rospy.get_param('~net_level_warn', net_level_warn)
     self._net_capacity = rospy.get_param('~net_capacity', net_capacity)
+    self._ignore_ifaces = rospy.get_param('~ignore_ifaces', ignore_ifaces)
     self._usage_timer = None
     self._usage_stat = DiagnosticStatus()
     self._usage_stat.name = 'Network Usage (%s)' % diag_hostname
@@ -149,6 +151,7 @@ class NetMonitor():
         kb_out.append(data[i + 1])
       level = DiagnosticStatus.OK
       for i in range(0, len(ifaces)):
+       if ifaces[i] not in self._ignore_ifaces:
         values.append(KeyValue(key = 'Interface Name',
           value = ifaces[i]))
         (retcode, cmd_out) = get_sys_net(ifaces[i], 'operstate')

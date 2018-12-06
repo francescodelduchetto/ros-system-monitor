@@ -14,8 +14,8 @@ hdd_monitor:
   hdd_temp_warn: 55.0
   hdd_temp_error: 70.0
 mem_monitor:
-  mem_level_warn: 0.95
-  mem_level_error: 0.99
+  mem_level_warn: 0.80
+  mem_level_error: 0.90
 ntp_monitor:
   reference_host: ntp.ubuntu.com
   offset_tolerance: 500.0
@@ -23,3 +23,4 @@ ntp_monitor:
 net_monitor:
   net_level_warn: 0.95
   net_capacity: 128.0
+  ignore_ifaces: ["eth0"]
